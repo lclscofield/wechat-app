@@ -1,0 +1,6 @@
+<!-- index.wxml -->
+<view class="container">
+  <view wx:for="{{ feedList }}" wx:key="item.url">
+    <image src="{{ item.imgUrl }}"></image>
+  </view>
+</view>
