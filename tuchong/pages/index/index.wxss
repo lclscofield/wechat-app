@@ -1,1 +1,19 @@
 /**index.wxss**/
+.home-img {
+  width: 700rpx;
+  max-height: 100%;
+  margin: 40rpx 0;
+  border-radius: 16rpx;
+  box-shadow: 2px 2px 7px 1px #89adb8;
+  animation-name: loading;
+  animation-duration: 1s;
+}
+
+@keyframes loading {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
