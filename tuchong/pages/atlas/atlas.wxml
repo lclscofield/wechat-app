@@ -1,0 +1,7 @@
+<!-- atlas.wxml -->
+<view class="atlas">
+  <view class="atlas-img-wrap" wx:for="{{ atlas.imgUrls }}" wx:key="{{ index + item.url }}" data-url="{{ item.url }}" bindtap="bigImg">
+    <text class="iconfont icon-loading" hidden="{{ !item.hidden }}"></text>
+    <image class="atlas-img" mode="widthFix" hidden="{{ item.hidden }}" lazy-load="{{ true }}" src="{{ item.url }}" data-index="{{ index }}" bindload="loadImg"></image>
+  </view>
+</view>

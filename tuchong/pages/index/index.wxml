@@ -1,7 +1,7 @@
 <!-- index.wxml -->
-<view class="container">
-  <view class="home-img-wrap" wx:for="{{ feedList }}" wx:key="{{ index + item.url }}">
+<view class="home">
+  <view class="home-img-wrap" wx:for="{{ feedList }}" wx:key="{{ index + item.url }}" data-item="{{ item }}" bindtap="toImgs">
     <text class="iconfont icon-loading" hidden="{{ !item.hidden }}"></text>
-    <image class="home-img" mode="widthFix" hidden="{{ item.hidden }}" lazy-load="{{ true }}" src="{{ item.imgUrl }}" data-index="{{ index }}" bindload="loadImg"></image>
+    <image class="home-img" mode="widthFix" hidden="{{ item.hidden }}" lazy-load="{{ true }}" src="{{ item.imgUrls[0].url }}" data-index="{{ index }}" bindload="loadImg"></image>
   </view>
 </view>

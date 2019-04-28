@@ -20,7 +20,6 @@ Page({
         feedList: res.feedList
       })
       wx.hideLoading()
-      console.log(this.data.feedList)
     })
   },
   // 下拉刷新
@@ -34,7 +33,6 @@ Page({
       this.setData({
         feedList: res.feedList
       })
-      console.log(this.data.feedList)
       wx.stopPullDownRefresh()
     })
   },
@@ -51,14 +49,22 @@ Page({
       this.setData({
         feedList: this.data.feedList.concat(res.feedList)
       })
-      console.log(this.data.feedList)
     })
   },
+  // 加载图片完成
   loadImg(e) {
-    const idx = e.target.dataset.index
+    const idx = e.currentTarget.dataset.index
     const hidden = `feedList[${idx}].hidden`
     this.setData({
       [hidden]: false
+    })
+  },
+  // 进入图片集
+  toImgs(e) {
+    const currentFeed = e.currentTarget.dataset.item
+    app.globalData.currentFeed = currentFeed
+    wx.navigateTo({
+      url: '../atlas/atlas'
     })
   },
   // 获取图片数据
@@ -79,10 +85,16 @@ Page({
           let data = res.data
           if (data.result === 'SUCCESS') {
             res.data.feedList.forEach(item => {
-              if (item.images[0]) {
-                item.imgUrl = `https://photo.tuchong.com/${item.images[0].user_id}/f/${item.images[0].img_id}.jpg`
-                item.hidden = true
+              item.imgUrls = []
+              if (item.images && item.images.length > 0) {
+                item.images.forEach(itemImg => {
+                  item.imgUrls.push({
+                    url: `https://photo.tuchong.com/${itemImg.user_id}/f/${itemImg.img_id}.jpg`,
+                    hidden: true
+                  })
+                })
               }
+              item.hidden = true
             })
             resolve(res.data)
           }
