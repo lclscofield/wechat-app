@@ -1,126 +1,59 @@
 <template>
-  <div @click="clickHandle">
-
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <img class="userinfo-avatar" src="/static/images/user.png" background-size="cover" />
-
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
-      </div>
-    </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" :value="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
-
-    <div class="all">
-        <div class="left">
-        </div>
-        <div class="right">
-        </div>
-    </div>
+  <div class="bookrack">
+    <div class="bookrack-title">共 {{ bookCount }} 本</div>
+    <button v-if="!openId" class="bookrack-btn" open-type="getUserInfo" @getuserinfo="onGotUserInfo">登录</button>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data () {
     return {
-      motto: 'Hello miniprograme',
-      userInfo: {
-        nickName: 'mpvue',
-        avatarUrl: 'http://mpvue.com/assets/logo.png'
-      }
+      bookCount: 0
     }
   },
-
-  components: {
-    card
+  computed: {
+    ...mapState([
+      'openId'
+    ])
   },
-
-  methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      if (mpvuePlatform === 'wx') {
-        mpvue.switchTab({ url })
-      } else {
-        mpvue.navigateTo({ url })
-      }
-    },
-    clickHandle (ev) {
-      console.log('clickHandle:', ev)
-      // throw {message: 'custom test'}
-    }
-  },
-
   created () {
     // let app = getApp()
+  },
+  methods: {
+    ...mapActions([
+      'login'
+    ]),
+    onGotUserInfo (e) {
+      const detail = e.mp.detail
+      console.log(detail)
+      if (detail.userInfo) {
+        this.login(detail.userInfo)
+      }
+    }
   }
 }
 </script>
 
-<style scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+<style lang="scss" scoped>
+.bookrack {
+  height: 100vh;
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
+  .bookrack-title {
+    font-size: 32rpx;
+    border-bottom: 2rpx solid #c2f0e8;
+    padding-left: 20rpx;
+    line-height: 60rpx;
+  }
 
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-.all{
-  width:7.5rem;
-  height:1rem;
-  background-color:blue;
-}
-.all:after{
-  display:block;
-  content:'';
-  clear:both;
-}
-.left{
-  float:left;
-  width:3rem;
-  height:1rem;
-  background-color:red;
-}
-
-.right{
-  float:left;
-  width:4.5rem;
-  height:1rem;
-  background-color:green;
+  .bookrack-btn {
+    line-height: 60rpx;
+    margin-top: 200rpx;
+    padding: 0;
+    font-size: 32rpx;
+    width: 30%;
+  }
 }
 </style>

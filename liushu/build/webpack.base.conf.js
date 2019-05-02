@@ -15,13 +15,12 @@ function resolve (dir) {
 }
 
 function getEntry (rootSrc) {
-  var map = {};
-  glob.sync(rootSrc + '/pages/**/main.js')
-  .forEach(file => {
-    var key = relative(rootSrc, file).replace('.js', '');
-    map[key] = file;
+  var map = {}
+  glob.sync(rootSrc + '/pages/**/main.js').forEach(file => {
+    var key = relative(rootSrc, file).replace('.js', '')
+    map[key] = file
   })
-   return map;
+  return map
 }
 
 const appEntry = { app: resolve('./src/main.js') }
@@ -38,14 +37,12 @@ let baseWebpackConfig = {
     path: config.build.assetsRoot,
     jsonpFunction: 'webpackJsonpMpvue',
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue': 'mpvue',
+      vue: 'mpvue',
       '@': resolve('src')
     },
     symlinks: false,
@@ -75,8 +72,8 @@ let baseWebpackConfig = {
           'babel-loader',
           {
             loader: 'mpvue-loader',
-            options: Object.assign({checkMPEntry: true}, vueLoaderConfig)
-          },
+            options: Object.assign({ checkMPEntry: true }, vueLoaderConfig)
+          }
         ]
       },
       {
@@ -108,16 +105,21 @@ let baseWebpackConfig = {
   plugins: [
     // api 统一桥协议方案
     new webpack.DefinePlugin({
-      'mpvue': 'global.mpvue',
-      'mpvuePlatform': 'global.mpvuePlatform'
+      mpvue: 'global.mpvue',
+      mpvuePlatform: 'global.mpvuePlatform'
     }),
     new MpvuePlugin(),
-    new CopyWebpackPlugin([{
-      from: '**/*.json',
-      to: ''
-    }], {
-      context: 'src/'
-    }),
+    new CopyWebpackPlugin(
+      [
+        {
+          from: '**/*.json',
+          to: ''
+        }
+      ],
+      {
+        context: 'src/'
+      }
+    ),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
@@ -140,10 +142,12 @@ const PLATFORM = process.env.PLATFORM
 if (/^(swan)|(tt)$/.test(PLATFORM)) {
   baseWebpackConfig = merge(baseWebpackConfig, {
     plugins: [
-      new CopyWebpackPlugin([{
-        from: path.resolve(__dirname, projectConfigMap[PLATFORM]),
-        to: path.resolve(config.build.assetsRoot)
-      }])
+      new CopyWebpackPlugin([
+        {
+          from: path.resolve(__dirname, projectConfigMap[PLATFORM]),
+          to: path.resolve(config.build.assetsRoot)
+        }
+      ])
     ]
   })
 }
