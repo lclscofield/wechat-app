@@ -7,6 +7,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+// import http from '../../api/http.js'
 
 export default {
   data () {
@@ -19,8 +20,21 @@ export default {
       'openId'
     ])
   },
-  created () {
-    // let app = getApp()
+  async created () {
+    // const res = await http({
+    //   url: '/search',
+    //   data: {
+    //     val: '诡秘之主'
+    //   }
+    // })
+    console.log(123)
+    mpvue.cloud
+      .callFunction({
+        name: 'getHome'
+      }).then(res => {
+        console.log(res)
+      })
+    // console.log(res)
   },
   methods: {
     ...mapActions([
