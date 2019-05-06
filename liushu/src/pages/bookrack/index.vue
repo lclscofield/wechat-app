@@ -20,22 +20,6 @@ export default {
       'openId'
     ])
   },
-  async created () {
-    // const res = await http({
-    //   url: '/search',
-    //   data: {
-    //     val: '诡秘之主'
-    //   }
-    // })
-    console.log(123)
-    mpvue.cloud
-      .callFunction({
-        name: 'getHome'
-      }).then(res => {
-        console.log(res)
-      })
-    // console.log(res)
-  },
   methods: {
     ...mapActions([
       'login'
@@ -54,15 +38,16 @@ export default {
 <style lang="scss" scoped>
 .bookrack {
   height: 100vh;
+  font-size: 28rpx;
 
-  .bookrack-title {
+  > .bookrack-title {
     font-size: 32rpx;
     border-bottom: 2rpx solid #c2f0e8;
     padding-left: 20rpx;
     line-height: 60rpx;
   }
 
-  .bookrack-btn {
+  > .bookrack-btn {
     line-height: 60rpx;
     margin-top: 200rpx;
     padding: 0;

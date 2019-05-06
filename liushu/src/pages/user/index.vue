@@ -32,7 +32,6 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      gender: 0
     }
   },
   computed: {
@@ -41,10 +40,9 @@ export default {
       'userInfo'
     ]),
     getGender () {
-      this.gender = this.userInfo ? this.userInfo.gender : 0
-      if (this.gender === 1) {
+      if (this.userInfo.gender === 1) {
         return '男'
-      } else if (this.gender === 2) {
+      } else if (this.userInfo.gender === 2) {
         return '女'
       }
       return '未知'
@@ -52,9 +50,6 @@ export default {
   },
   mounted () {
     console.log(this.userInfo)
-    if (this.userInfo) {
-      this.gender = this.userInfo.gender
-    }
   },
   methods: {
     ...mapActions([
@@ -64,7 +59,6 @@ export default {
       const detail = e.mp.detail
       if (detail.userInfo) {
         this.login(detail.userInfo)
-        this.gender = detail.userInfo.gender
       }
     }
   }

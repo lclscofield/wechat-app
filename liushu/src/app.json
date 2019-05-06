@@ -1,7 +1,9 @@
 {
   "pages": [
-    "pages/index/main",
-    "pages/user/main"
+    "pages/bookrack/main",
+    "pages/home/main",
+    "pages/user/main",
+    "pages/bookDetail/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -17,7 +19,13 @@
     "list": [
       {
         "text": "书架",
-        "pagePath": "pages/index/main",
+        "pagePath": "pages/bookrack/main",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "text": "主页",
+        "pagePath": "pages/home/main",
         "iconPath": "static/tabs/home.png",
         "selectedIconPath": "static/tabs/home-active.png"
       },

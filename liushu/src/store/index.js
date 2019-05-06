@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 const state = {
   openId: 'hash',
-  userInfo: {}
+  userInfo: {}, // 用户信息
+  cacheDetail: {} // 书籍详情缓存
 }
 
 export default new Vuex.Store({

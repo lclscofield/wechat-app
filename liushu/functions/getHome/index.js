@@ -27,10 +27,10 @@ function getCategory ($, i) {
     categoryItem.list = []
     categoryItem.title = getText($(this), 'h2')
     categoryItem.top = {
-      bookName: getText($(this), 'a'),
-      imgUrl: getAttr($(this), 'img', 'src'),
-      href: getAttr($(this), 'a', 'href'),
-      bookDesc: getText($(this), 'dd')
+      bookName: getText($(this), '.top a'),
+      imgUrl: getAttr($(this), '.top img', 'src'),
+      href: getAttr($(this), '.top a', 'href'),
+      bookDesc: getText($(this), '.top dd')
     }
 
     $(this)
@@ -62,7 +62,10 @@ async function home ($) {
   $('#hotcontent .l .item').each(function (idx) {
     hot.list.push({
       href: getAttr($(this), 'a', 'href'),
-      imgUrl: getAttr($(this), 'img', 'src')
+      imgUrl: getAttr($(this), 'img', 'src'),
+      bookName: getText($(this), 'dt a'),
+      author: getText($(this), 'dt span'),
+      bookDesc: getText($(this), 'dd')
     })
   })
 

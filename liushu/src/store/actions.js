@@ -1,7 +1,8 @@
 const actions = {
   login ({ commit }, userInfo) {
     wx.showLoading({
-      title: '加载中...'
+      title: '加载中...',
+      mask: true
     })
     return mpvue.cloud
       .callFunction({
