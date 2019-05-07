@@ -4,7 +4,7 @@
     <div class="home-hot">
       <swiper class="hot-swiper" autoplay="true" circular="true" previous-margin="25px" next-margin="25px" @change="swiperChange">
         <swiper-item class="hot-swiper-item" v-for="(item, index) in hot.list" :key="index + item.imgUrl">
-          <div class="hot-swiper-item-wrap" @click="toBook(item.href, item.bookName)">
+          <div class="hot-swiper-item-wrap" @click="toBookDetail(item.href, item.bookName)">
             <img :src="item.imgUrl" class="slide-image" />
             <div class="hot-content">
               <div class="hot-content-info">
@@ -20,7 +20,7 @@
     <!-- 推荐 -->
     <div class="home-recommend">
       <div class="recommend-title">{{ recommend.title }}</div>
-      <div class="recommend-item" hover-class="hover-class" hover-stay-time="200" v-for="(item, index) in recommend.list" :key="index + item.href" @click="toBook(item.href, item.bookName)">
+      <div class="recommend-item" hover-class="hover-class" hover-stay-time="200" v-for="(item, index) in recommend.list" :key="index + item.href" @click="toBookDetail(item.href, item.bookName)">
         <div class="recommend-info">
           <div class="recommend-type">{{ item.type }}</div>
           <div class="recommend-book-name">{{ item.bookName }}</div>
@@ -33,14 +33,14 @@
     <div class="home-category">
       <div class="category-list" v-for="(typeItem, typeIdx) in category" :key="typeIdx + typeItem.title">
         <div class="category-title">{{ typeItem.title }}</div>
-        <div class="category-top" hover-class="hover-class" hover-stay-time="200" @click="toBook(typeItem.top.href, typeItem.top.bookName)">
+        <div class="category-top" hover-class="hover-class" hover-stay-time="200" @click="toBookDetail(typeItem.top.href, typeItem.top.bookName)">
           <img :src="typeItem.top.imgUrl" class="category-top-img">
           <div class="category-top-content">
             <div class="category-top-book-name">{{ typeItem.top.bookName }}</div>
             <div class="category-top-desc">{{ typeItem.top.bookDesc }}</div>
           </div>
         </div>
-        <div class="category-item" hover-class="hover-class" hover-stay-time="200" v-for="(item, idx) in typeItem.list" :key="idx + item.href" @click="toBook(item.href, item.bookName)">
+        <div class="category-item" hover-class="hover-class" hover-stay-time="200" v-for="(item, idx) in typeItem.list" :key="idx + item.href" @click="toBookDetail(item.href, item.bookName)">
           <div class="category-item-book-name">{{ item.bookName }}</div>
           <div class="category-item-author">{{ item.author }}</div>
         </div>
@@ -70,7 +70,7 @@ export default {
     this.category = data.category
   },
   methods: {
-    toBook (url, title) {
+    toBookDetail (url, title) {
       mpvue.navigateTo({
         url: '../bookDetail/main?url=' + url + '&title=' + title
       })

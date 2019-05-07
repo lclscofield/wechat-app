@@ -3,7 +3,8 @@
     "pages/bookrack/main",
     "pages/home/main",
     "pages/user/main",
-    "pages/bookDetail/main"
+    "pages/bookDetail/main",
+    "pages/reading/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

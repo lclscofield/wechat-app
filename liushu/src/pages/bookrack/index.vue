@@ -2,7 +2,7 @@
   <div class="bookrack" v-if="openId !== 'hash'">
     <div class="bookrack-title">共 {{ bookrack.length }} 本</div>
     <div class="bookrack-list" v-if="bookrack.length">
-      <div class="bookrack-item" v-for="(item, idx) in bookrack" :key="idx + item.url">
+      <div class="bookrack-item" v-for="(item, idx) in bookrack" :key="idx + item.url" @click="toBooKCtx(item)">
         <img :src="item.imgUrl" class="book-img">
         <div class="book-content">
           <div class="book-name">{{ item.bookName }}</div>
@@ -62,6 +62,7 @@ export default {
     ...mapActions([
       'login'
     ]),
+    // 授权登录
     onGotUserInfo (e) {
       const detail = e.mp.detail
       console.log(detail)
@@ -77,7 +78,7 @@ export default {
         success (res) {
           const tapIndex = res.tapIndex
           if (tapIndex === 0) {
-            that.toBook(obj.url, obj.bookName)
+            that.toBookDetail(obj.url, obj.bookName)
           } else if (tapIndex === 1) {
             that.removeBook(idx)
           }
@@ -85,7 +86,7 @@ export default {
       })
     },
     // 前往书籍详情
-    toBook (url, title) {
+    toBookDetail (url, title) {
       mpvue.navigateTo({
         url: '../bookDetail/main?url=' + url + '&title=' + title
       })
@@ -104,13 +105,19 @@ export default {
             bookIdx: idx
           }
         })
-      console.log(res)
       const data = res.result
       const newUserInfo = Object.assign(this.userInfo, data)
       this.setUserInfo(newUserInfo)
       mpvue.hideLoading()
       mpvue.showToast({
         title: '移出成功'
+      })
+    },
+    // 前往书籍内容
+    toBooKCtx (obj) {
+      console.log(obj)
+      mpvue.navigateTo({
+        url: '../reading/main?url=' + obj.url + '&href=' + obj.currentChapter.href + '&title=' + obj.currentChapter.chapterTitle
       })
     }
   }
