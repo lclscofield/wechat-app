@@ -1,6 +1,6 @@
 const actions = {
   login ({ commit }, userInfo) {
-    wx.showLoading({
+    mpvue.showLoading({
       title: '加载中...',
       mask: true
     })
@@ -16,10 +16,10 @@ const actions = {
         console.log(res)
         commit('SET_OPEN_ID', result.userInfo.openId)
         commit('SET_USER_INFO', result.userInfo)
-        wx.hideLoading()
+        mpvue.hideLoading()
       })
       .catch(err => {
-        wx.hideLoading()
+        mpvue.hideLoading()
         console.error(err)
       })
   }

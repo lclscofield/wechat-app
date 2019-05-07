@@ -10,7 +10,7 @@
         </div>
         <div class="detail-text">
           <div>最近更新:</div>
-          <div>{{ detail.lastUpdate }}</div>
+          <div>{{ lastUpdate }}</div>
         </div>
         <div class="detail-text">
           <div>最新章节:</div>
@@ -19,34 +19,56 @@
       </div>
     </div>
 
-    <div class="detail-desc">{{ detail.desc }}</div>
+    <div class="detail-desc">
+      <div class="detail-desc-title">简介</div>
+      <div class="detail-desc-content">{{ detail.desc }}</div>
+    </div>
 
-    <div class="detail-btn">
-      <div class="add-book" hover-class="hover-btn" hover-stay-time="200">加入书架</div>
+    <div class="detail-btn" v-if="openId">
+      <div class="add-book" hover-class="hover-btn" hover-stay-time="200" @click="bookHandler">{{ isBookrack ? '移出书架': '加入书架' }}</div>
       <div class="read-book" hover-class="hover-btn" hover-stay-time="200">开始阅读</div>
     </div>
+    <button v-else class="detail-login" open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo">登录</button>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { formatTime } from '../../utils'
 
 export default {
   data () {
     return {
       showPage: false,
+      url: '',
       detail: {}
     }
   },
   computed: {
     ...mapState([
+      'openId',
+      'userInfo',
       'cacheDetail'
-    ])
+    ]),
+    // 最后更新时间
+    lastUpdate () {
+      return formatTime(new Date(this.detail.lastUpdate))
+    },
+    // 是否已存在书架中
+    isBookrack () {
+      if (this.userInfo.openId && this.userInfo.bookrack.some(item => {
+        return item.url === this.url
+      })) {
+        return true
+      }
+      return false
+    }
   },
   async mounted () {
     this.showPage = false
     this.detail = {}
     const { url, title } = this.$root.$mp.query
+    this.url = url
     console.log(url, title)
     // 修改导航栏 title
     mpvue.setNavigationBarTitle({
@@ -78,11 +100,62 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setCacheDetail: 'SET_CACHE_DETAIL'
+      setCacheDetail: 'SET_CACHE_DETAIL',
+      setUserInfo: 'SET_USER_INFO'
     }),
+    ...mapActions([
+      'login'
+    ]),
     // 前往文章内容
     toChapter (obj) {
       console.log(obj)
+    },
+    onGotUserInfo (e) {
+      const detail = e.mp.detail
+      if (detail.userInfo) {
+        this.login(detail.userInfo)
+      }
+    },
+    // 书架移入移出
+    async bookHandler () {
+      mpvue.showLoading({
+        title: '加载中...',
+        mask: true
+      })
+      const bookDetail = {
+        url: this.url,
+        bookName: this.detail.bookName,
+        imgUrl: this.detail.imgUrl,
+        lastChapter: this.detail.lastChapter,
+        lastUpdate: this.detail.lastUpdate,
+        currentChapter: this.detail.firstChapter
+      }
+      let bookIdx = 0
+      this.userInfo.bookrack.some((item, idx) => {
+        if (item.url === this.url) {
+          bookIdx = idx
+          return true
+        }
+      })
+      const postData = this.isBookrack ? { bookIdx } : { bookDetail }
+
+      const res = await mpvue.cloud
+        .callFunction({
+          name: 'bookHandler',
+          data: {
+            isBookrack: this.isBookrack,
+            ...postData
+          }
+        })
+      console.log(res)
+      const data = res.result
+      const newUserInfo = Object.assign(this.userInfo, data)
+      this.setUserInfo(newUserInfo)
+      mpvue.hideLoading()
+      mpvue.showToast({
+        title: this.isBookrack ? '加入成功' : '移出成功'
+      })
+      console.log(this.userInfo)
     }
   }
 }
@@ -133,7 +206,15 @@ export default {
 
   > .detail-desc {
     padding-left: 20rpx;
-    line-height: 44rpx;
+
+    > .detail-desc-title {
+      font-size: 32rpx;
+      line-height: 60rpx;
+    }
+
+    > .detail-desc-content {
+      line-height: 44rpx;
+    }
   }
 
   > .detail-btn {
@@ -156,6 +237,12 @@ export default {
     > .read-book {
       background: #7ea3a3;
     }
+  }
+
+  > .detail-login {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
   }
 }
 </style>

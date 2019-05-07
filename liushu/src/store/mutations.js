@@ -8,7 +8,7 @@ const matations = {
     state.openId = v
   },
   [types.SET_USER_INFO] (state, v) {
-    Object.assign(state.userInfo, v)
+    state.userInfo = JSON.parse(JSON.stringify(v))
   },
   [types.SET_CACHE_DETAIL] (state, v) {
     Object.assign(state.cacheDetail, v)

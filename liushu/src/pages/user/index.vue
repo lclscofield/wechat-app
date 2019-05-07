@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <button v-if="!openId" class="user-login" open-type="getUserInfo" @getuserinfo="onGotUserInfo">登录</button>
+    <button v-if="!openId" class="user-login" open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo">登录</button>
     <div v-else class="user-info">
       <div class="user-cell user-title">
         <img :src="userInfo.avatarUrl" class="user-avatar">
@@ -20,7 +20,7 @@
       </div>
       <div class="user-cell">
         <div class="user-cell-label">上次登录时间</div>
-        <div class="user-cell-val">{{ userInfo.updateTime }}</div>
+        <div class="user-cell-val">{{ lastLoginTime }}</div>
       </div>
     </div>
   </div>
@@ -28,6 +28,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { formatTime } from '../../utils'
 
 export default {
   data () {
@@ -46,6 +47,9 @@ export default {
         return '女'
       }
       return '未知'
+    },
+    lastLoginTime () {
+      return formatTime(new Date(this.userInfo.updateTime))
     }
   },
   mounted () {
