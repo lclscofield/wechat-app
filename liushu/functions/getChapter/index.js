@@ -4,7 +4,6 @@ const cheerio = require('cheerio')
 
 cloud.init()
 
-const target = 'https://www.qu.la'
 let href = ''
 
 function getText ($, rule) {
@@ -16,21 +15,16 @@ function getText ($, rule) {
   return $.text().trim()
 }
 
-function getAttr ($, rule, attr) {
-  if (rule) {
-    return target + $.find(rule).attr(attr)
-  }
-  return target + $.attr(attr)
-}
-
 async function getChapter ($) {
   const chapter = {}
   // 章节名
   chapter.title = getText($('.bookname h1'))
   // 上一章
-  chapter.prev = href.slice(0, href.lastIndexOf('/') + 1) + getAttr($('#pager_prev'), '', 'href')
+  const prevHref = $('#pager_prev').attr('href')
+  chapter.prev = prevHref === './' ? '' : href.slice(0, href.lastIndexOf('/') + 1) + prevHref
   // 下一章
-  chapter.next = href.slice(0, href.lastIndexOf('/') + 1) + getAttr($('#pager_next'), '', 'href')
+  const nextHref = $('#pager_next').attr('href')
+  chapter.next = nextHref === './' ? '' : href.slice(0, href.lastIndexOf('/') + 1) + nextHref
   // 内容
   const body = $('#content').html()
   chapter.ctx = body.slice(0, body.lastIndexOf('章节错误,点此举报'))
@@ -39,6 +33,7 @@ async function getChapter ($) {
 
 // 云函数入口函数
 exports.main = async (event, context) => {
+  // const wxContext = cloud.getWXContext()
   href = event.href
 
   const res = await cloud.callFunction({
@@ -48,7 +43,7 @@ exports.main = async (event, context) => {
     }
   })
   const $ = cheerio.load(res.result, { decodeEntities: false })
-
   const data = await getChapter($)
+
   return data
 }

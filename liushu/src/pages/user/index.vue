@@ -71,7 +71,6 @@ export default {
 
 <style lang="scss" scoped>
 .user {
-  height: 100vh;
   font-size: 28rpx;
 
   > .user-login {

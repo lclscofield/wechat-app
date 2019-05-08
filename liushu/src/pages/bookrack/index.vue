@@ -9,7 +9,7 @@
           <div class="last-chapter">{{ lastUpdate[idx] }}: {{ item.lastChapter.chapterTitle }}</div>
           <div class="current-chapter">阅读到: {{ item.currentChapter.chapterTitle }}</div>
         </div>
-        <div class="to-book-detail" hover-class="hover-detail" hover-stay-time="50" @click="bookSet(item, idx)">...</div>
+        <div class="to-book-detail" hover-class="hover-detail" hover-stay-time="50" @click.stop="bookSet(item, idx)">...</div>
       </div>
     </div>
 
@@ -23,6 +23,12 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data () {
     return {
+      bookrack: []
+    }
+  },
+  watch: {
+    userInfo () {
+      this.bookrack = this.userInfo.bookrack
     }
   },
   computed: {
@@ -30,12 +36,6 @@ export default {
       'openId',
       'userInfo'
     ]),
-    bookrack () {
-      if (this.userInfo) {
-        return this.userInfo.bookrack
-      }
-      return []
-    },
     lastUpdate () {
       if (this.userInfo && this.userInfo.bookrack) {
         return this.userInfo.bookrack.map(item => {
@@ -54,6 +54,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.bookrack)
   },
   methods: {
     ...mapMutations({
@@ -115,9 +116,8 @@ export default {
     },
     // 前往书籍内容
     toBooKCtx (obj) {
-      console.log(obj)
       mpvue.navigateTo({
-        url: '../reading/main?url=' + obj.url + '&href=' + obj.currentChapter.href + '&title=' + obj.currentChapter.chapterTitle
+        url: '../reading/main?url=' + obj.url + '&href=' + obj.currentChapter.href + '&title=' + obj.bookName
       })
     }
   }
@@ -126,23 +126,22 @@ export default {
 
 <style lang="scss" scoped>
 .bookrack {
-  height: 100vh;
   font-size: 28rpx;
 
   > .bookrack-title {
-    font-size: 32rpx;
+    font-size: 36rpx;
     border-bottom: 2rpx solid #c2f0e8;
     padding-left: 20rpx;
-    line-height: 60rpx;
+    line-height: 80rpx;
   }
 
   > .bookrack-list {
-    padding-left: 20rpx;
+    padding: 20rpx 0 0 20rpx;
 
     > .bookrack-item {
       display: flex;
       justify-content: space-between;
-      height: 150rpx;
+      height: 180rpx;
       border-bottom: 2rpx solid #e7f5f5;
 
       &:last-child {
@@ -151,8 +150,8 @@ export default {
 
       > .book-img {
         align-self: center;
-        width: 90rpx;
-        height: 120rpx;
+        width: 120rpx;
+        height: 150rpx;
         border-radius: 8rpx;
       }
 
@@ -165,13 +164,13 @@ export default {
         }
 
         > .last-chapter {
-          font-size: 24rpx;
+          font-size: 28rpx;
           color: #888d8d;
           line-height: 1.5;
         }
 
         > .current-chapter {
-          font-size: 20rpx;
+          font-size: 24rpx;
           color: #b1b9b9;
           line-height: 1.5;
         }
@@ -179,7 +178,7 @@ export default {
 
       > .to-book-detail {
         padding: 0 40rpx;
-        line-height: 150rpx;
+        line-height: 180rpx;
       }
       .hover-detail {
         background: #d7e0e0;

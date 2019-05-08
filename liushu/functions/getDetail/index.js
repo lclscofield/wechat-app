@@ -5,6 +5,7 @@ const cheerio = require('cheerio')
 cloud.init()
 
 const target = 'https://www.qu.la'
+let url = '' // 书籍地址
 
 function getText ($, rule) {
   if (rule) {
@@ -40,7 +41,11 @@ async function getDetail ($) {
         let lastChapter = {}
         let lastChapterTitle = getText($(this))
         lastChapter.chapterTitle = lastChapterTitle.slice(lastChapterTitle.indexOf('：') + 1)
-        lastChapter.href = getAttr($(this), 'a', 'href')
+        lastChapter.href =
+          url.slice(0, url.lastIndexOf('/') + 1) +
+          $(this)
+            .find('a')
+            .attr('href')
         detail.lastChapter = lastChapter
         break
     }
@@ -71,10 +76,11 @@ async function getDetail ($) {
 
 // 云函数入口函数
 exports.main = async (event, context) => {
+  url = event.url
   const res = await cloud.callFunction({
     name: 'getHtml',
     data: {
-      url: event.url
+      url: url
     }
   })
   const $ = cheerio.load(res.result, { decodeEntities: false })

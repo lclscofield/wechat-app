@@ -14,7 +14,7 @@
         </div>
         <div class="detail-text">
           <div>最新章节:</div>
-          <div class="last-chapter" hover-class="hover-chapter" hover-stay-time="200" @click="toChapter(detail.lastChapter)">{{ detail.lastChapter.chapterTitle }}</div>
+          <div class="last-chapter" hover-class="hover-chapter" hover-stay-time="200" @click="toLastChapter()">{{ detail.lastChapter.chapterTitle }}</div>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
 
     <div class="detail-btn" v-if="openId">
       <div class="add-book" hover-class="hover-btn" hover-stay-time="200" @click="bookHandler">{{ isBookrack ? '移出书架': '加入书架' }}</div>
-      <div class="read-book" hover-class="hover-btn" hover-stay-time="200">开始阅读</div>
+      <div class="read-book" hover-class="hover-btn" hover-stay-time="200" @click="toBooKCtx()">开始阅读</div>
     </div>
     <button v-else class="detail-login" open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo">登录</button>
   </div>
@@ -40,7 +40,7 @@ export default {
   data () {
     return {
       showPage: false,
-      url: '',
+      url: '', // 书籍地址
       detail: {}
     }
   },
@@ -106,10 +106,13 @@ export default {
     ...mapActions([
       'login'
     ]),
-    // 前往文章内容
-    toChapter (obj) {
-      console.log(obj)
+    // 前往最后一章
+    toLastChapter () {
+      mpvue.navigateTo({
+        url: '../reading/main?url=' + this.url + '&href=' + this.detail.lastChapter.href + '&title=' + this.detail.bookName
+      })
     },
+    // 授权登录
     onGotUserInfo (e) {
       const detail = e.mp.detail
       if (detail.userInfo) {
@@ -156,6 +159,31 @@ export default {
         title: this.isBookrack ? '加入成功' : '移出成功'
       })
       console.log(this.userInfo)
+    },
+    // 前往书籍内容
+    toBooKCtx () {
+      let obj = {}
+      // 是否在书架中，是则前往当前阅读章节，否则前往第一章
+      if (this.isBookrack) {
+        let bookrack = this.userInfo.bookrack
+        bookrack.some(item => {
+          if (item.url === this.url) {
+            obj = item
+            return true
+          }
+        })
+      } else {
+        obj = {
+          url: this.url,
+          currentChapter: {
+            href: this.detail.firstChapter.href
+          },
+          bookName: this.detail.bookName
+        }
+      }
+      mpvue.navigateTo({
+        url: '../reading/main?url=' + obj.url + '&href=' + obj.currentChapter.href + '&title=' + obj.bookName
+      })
     }
   }
 }
