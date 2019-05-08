@@ -4,7 +4,8 @@
     "pages/home/main",
     "pages/user/main",
     "pages/bookDetail/main",
-    "pages/reading/main"
+    "pages/reading/main",
+    "pages/catalog/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

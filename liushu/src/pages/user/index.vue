@@ -52,8 +52,7 @@ export default {
       return formatTime(new Date(this.userInfo.updateTime))
     }
   },
-  mounted () {
-    console.log(this.userInfo)
+  onLoad () {
   },
   methods: {
     ...mapActions([

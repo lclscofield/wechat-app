@@ -13,7 +13,6 @@ const actions = {
       })
       .then(res => {
         const result = res.result
-        console.log(res)
         commit('SET_OPEN_ID', result.userInfo.openId)
         commit('SET_USER_INFO', result.userInfo)
         mpvue.hideLoading()

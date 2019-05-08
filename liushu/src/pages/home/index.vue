@@ -63,7 +63,6 @@ export default {
       .callFunction({
         name: 'getHome'
       })
-    console.log(res)
     const data = res.result
     this.hot = data.hot
     this.recommend = data.recommend

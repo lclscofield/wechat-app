@@ -64,12 +64,11 @@ export default {
       return false
     }
   },
-  async mounted () {
+  async onLoad () {
     this.showPage = false
     this.detail = {}
     const { url, title } = this.$root.$mp.query
     this.url = url
-    console.log(url, title)
     // 修改导航栏 title
     mpvue.setNavigationBarTitle({
       title
@@ -91,7 +90,6 @@ export default {
       })
     mpvue.hideLoading()
     this.showPage = true
-    console.log(res.result)
     this.detail = res.result
     // 缓存起来
     this.setCacheDetail({
@@ -150,7 +148,6 @@ export default {
             ...postData
           }
         })
-      console.log(res)
       const data = res.result
       const newUserInfo = Object.assign(this.userInfo, data)
       this.setUserInfo(newUserInfo)
@@ -158,7 +155,6 @@ export default {
       mpvue.showToast({
         title: this.isBookrack ? '加入成功' : '移出成功'
       })
-      console.log(this.userInfo)
     },
     // 前往书籍内容
     toBooKCtx () {

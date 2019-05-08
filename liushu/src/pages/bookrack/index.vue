@@ -54,7 +54,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.bookrack)
   },
   methods: {
     ...mapMutations({
@@ -66,7 +65,6 @@ export default {
     // 授权登录
     onGotUserInfo (e) {
       const detail = e.mp.detail
-      console.log(detail)
       if (detail.userInfo) {
         this.login(detail.userInfo)
       }
@@ -75,12 +73,14 @@ export default {
     bookSet (obj, idx) {
       const that = this
       mpvue.showActionSheet({
-        itemList: ['简介', '移出书架'],
+        itemList: ['简介', '目录', '移出书架'],
         success (res) {
           const tapIndex = res.tapIndex
           if (tapIndex === 0) {
             that.toBookDetail(obj.url, obj.bookName)
           } else if (tapIndex === 1) {
+            that.toCatalog(obj.url, obj.bookName, obj.currentChapter.href)
+          } else if (tapIndex === 2) {
             that.removeBook(idx)
           }
         }
@@ -118,6 +118,12 @@ export default {
     toBooKCtx (obj) {
       mpvue.navigateTo({
         url: '../reading/main?url=' + obj.url + '&href=' + obj.currentChapter.href + '&title=' + obj.bookName
+      })
+    },
+    // 前往目录
+    toCatalog (url, title, currentHref) {
+      mpvue.navigateTo({
+        url: '../catalog/main?url=' + url + '&title=' + title + '&currentHref=' + currentHref
       })
     }
   }

@@ -27,13 +27,15 @@ async function getChapter ($) {
   chapter.next = nextHref === './' ? '' : href.slice(0, href.lastIndexOf('/') + 1) + nextHref
   // 内容
   const body = $('#content').html()
-  chapter.ctx = body.slice(0, body.lastIndexOf('章节错误,点此举报'))
+  let text = body.slice(0, body.lastIndexOf('章节错误,点此举报'))
+  chapter.ctx = text.replace('<br>　　 <br>　　', '<br>')
+  console.log(text)
+  console.log(chapter.ctx)
   return chapter
 }
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  // const wxContext = cloud.getWXContext()
   href = event.href
 
   const res = await cloud.callFunction({

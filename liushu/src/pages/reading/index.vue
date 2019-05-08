@@ -5,7 +5,7 @@
     <div class="chapter-ctrl" v-if="chapter.href">
       <div class="next chapter-ctrl-item" @click="toChapter('next')" hover-class="hover-btn" hover-stay-time="200">下一章</div>
       <div class="prev chapter-ctrl-item" @click="toChapter('prev')" hover-class="hover-btn" hover-stay-time="200">上一章</div>
-      <div class="catalog chapter-ctrl-item" hover-class="hover-btn" hover-stay-time="200">目录</div>
+      <div class="chapter-catalog chapter-ctrl-item" hover-class="hover-btn" hover-stay-time="200">目录</div>
     </div>
     <!-- setting -->
     <div class="setting"></div>
@@ -29,15 +29,13 @@ export default {
       'userInfo'
     ])
   },
-  beforeMount () {
-    this.chapter = {}
-  },
   /*
     url: 书籍地址
     href: 当前章节地址
     title: 书籍名称
   */
-  async mounted () {
+  async onLoad () {
+    this.chapter = {}
     const { url, href, title } = this.$root.$mp.query
 
     mpvue.setNavigationBarTitle({
@@ -74,6 +72,7 @@ export default {
             data: { href, url }
           })
         this.chapter = res.result
+        console.log(this.chapter)
         mpvue.hideLoading()
 
         // 异步缓存数据
@@ -187,7 +186,7 @@ export default {
       width: 45%;
     }
 
-    > .catalog {
+    > .chapter-catalog {
       width: 45%;
     }
   }
