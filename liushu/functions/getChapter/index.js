@@ -28,7 +28,7 @@ async function getChapter ($) {
   // 内容
   const body = $('#content').html()
   let text = body.slice(0, body.lastIndexOf('章节错误,点此举报'))
-  chapter.ctx = text.replace('<br>　　 <br>　　', '<br>')
+  chapter.ctx = text
   console.log(text)
   console.log(chapter.ctx)
   return chapter
