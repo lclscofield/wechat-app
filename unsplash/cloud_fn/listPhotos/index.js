@@ -13,10 +13,9 @@ const unsplash = new Unsplash({
 cloud.init()
 
 // 云函数入口函数
+// 参数: page, perPage, orderBy(有效值: latest, oldest, popular; 默认值: latest)
 exports.main = async (event, context) => {
-  // const wxContext = cloud.getWXContext()
-
-  const res = await unsplash.photos.listPhotos(2, 15, 'latest').then(toJson)
+  const res = await unsplash.photos.listPhotos(...event.params).then(toJson)
 
   if (res && res.status === 200) {
     return res.body
