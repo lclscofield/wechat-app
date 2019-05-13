@@ -1,7 +1,8 @@
 <template>
   <div class="list">
     <div class="photos-list" v-for="(item, idx) in photos" :key="idx + item.id">
-      <img :src="" alt="">
+      <img class="photo" :src="item.urls.small" mode="widthFix">
+      <div>{{ '-' + item.user.first_name + ' ' + item.user.last_name }}</div>
     </div>
   </div>
 </template>
@@ -23,7 +24,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .list {
+  font-size: 28rpx;
+
+  > .photos-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40rpx;
+
+    > .photo {
+      width: 700rpx;
+    }
+  }
 }
 </style>

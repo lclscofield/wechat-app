@@ -18,8 +18,8 @@
 			"outputPath": ""
 		}
 	},
-  "miniprogramRoot": "dist/wx/",
-  "cloudfunctionRoot": "cloud_fn",
+	"miniprogramRoot": "dist/wx/",
+	"cloudfunctionRoot": "cloud_fn/",
 	"compileType": "miniprogram",
 	"appid": "wx14a9b595e79c5b5b",
 	"projectname": "unsplash",
