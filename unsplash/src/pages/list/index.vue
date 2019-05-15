@@ -1,7 +1,7 @@
 <template>
   <div class="list">
     <div class="photos-list" v-for="(item, idx) in photos" :key="idx + item.id">
-      <img class="photo" :src="item.urls.small" mode="widthFix">
+      <img class="photo" :src="item.urls.raw + '&w=1600&h=900'" mode="widthFix" />
       <div>{{ '-' + item.user.first_name + ' ' + item.user.last_name }}</div>
     </div>
 
@@ -21,7 +21,10 @@ export default {
   async onLoad () {
     this.loading = true
     const res = await wx.cloud.callFunction({
-      name: 'request'
+      name: 'listPhotos',
+      data: {
+        params: [1, 15, 'latest']
+      }
     })
     console.log(res)
     this.photos = res.result

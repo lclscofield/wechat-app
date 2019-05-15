@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "wux-spin": "../../../static/wux-ui/spin/index"
+    "wux-spin": "../../../static/wux-ui/spin/index",
+    "wux-image": "../../../static/wux-ui/image/index"
   }
 }
