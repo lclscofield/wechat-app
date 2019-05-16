@@ -4,8 +4,8 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "小白运势",
+    "navigationBarBackgroundColor": "#c983ec",
+    "navigationBarTitleText": "小白星座运势",
     "navigationBarTextStyle": "black"
   }
 }
