@@ -18,6 +18,7 @@
 			"outputPath": ""
 		}
 	},
+	"cloudfunctionRoot": "cloud_fn/",
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wx7ac950c3d9a58828",

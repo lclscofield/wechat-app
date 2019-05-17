@@ -1,11 +1,13 @@
 {
   "pages": [
-    "pages/index/main"
+    "pages/index/main",
+    "pages/xingzuo/main",
+    "pages/xingzuo_detail/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#c983ec",
+    "navigationBarBackgroundColor": "#43cbff",
     "navigationBarTitleText": "小白星座运势",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   }
 }
