@@ -29,6 +29,11 @@ export default {
       }
     }
   },
+  onShareAppMessage (res) {
+    return {
+      title: '十二星座'
+    }
+  },
   computed: {
     xingzuoItems () {
       return Object.keys(this.xingzuoData)

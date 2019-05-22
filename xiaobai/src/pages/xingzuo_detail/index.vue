@@ -1,5 +1,5 @@
 <template>
-  <div class="xingzuo-detail">
+  <scroll-view class="xingzuo-detail" scroll-y="true" enable-back-to-top="true">
     <div class="xingzuo-detail-wrap" v-if="showPage">
       <div class="xingzuo-title-wrap">
         <i class="iconfont icon-" :class="[ 'icon-' + type + 'zuo' ]"></i>
@@ -19,7 +19,7 @@
 
     <!-- loading -->
     <van-toast id="van-toast" />
-  </div>
+  </scroll-view>
 </template>
 
 <script>
@@ -69,6 +69,12 @@ export default {
         '健康运势': 'health_txt',
         '时间': 'time'
       }
+    }
+  },
+  onShareAppMessage (res) {
+    return {
+      title: this.title,
+      path: '/pages/xingzuo_detail/main?type=' + this.type + '&title=' + this.title
     }
   },
   computed: {
@@ -145,10 +151,9 @@ export default {
 <style lang="scss" scoped>
 .xingzuo-detail {
   height: 100vh;
-  overflow: auto;
   font-size: 28rpx;
 
-  > .xingzuo-detail-wrap {
+  .xingzuo-detail-wrap {
     padding: 60rpx 40rpx;
 
     > .xingzuo-title-wrap {

@@ -14,6 +14,8 @@ export default {
   data () {
     return {}
   },
+  onShareAppMessage (res) {
+  },
   methods: {
     toXingzuo () {
       wx.navigateTo({
