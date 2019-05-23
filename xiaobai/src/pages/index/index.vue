@@ -31,7 +31,7 @@ export default {
   height: 100vh;
   overflow: auto;
   font-size: 28rpx;
-  background-image: linear-gradient(135deg, #43cbff 10%, #9708cc 100%);
+  background-image: linear-gradient(135deg, #ce9ffc 10%, #7367f0 100%);
 
   @keyframes bounce {
     from {
@@ -54,12 +54,12 @@ export default {
   > .home-card {
     width: 80%;
     margin: 60rpx auto 0;
-    border: 2rpx solid #2e5bbd;
+    border: 2rpx solid #ad95c9;
     border-radius: 8rpx;
     padding: 40rpx 20rpx;
-    box-shadow: 4rpx 4rpx 14rpx 4rpx #2e5bbd;
-    color: #ffffff;
-    background: rgba(4, 18, 102, 1);
+    box-shadow: 4rpx 4rpx 14rpx 4rpx #8e7399;
+    color: #000000;
+    background: rgba(255, 255, 255, 0.5);
     animation-name: bounce;
     animation-duration: 2s;
     animation-iteration-count: infinite;

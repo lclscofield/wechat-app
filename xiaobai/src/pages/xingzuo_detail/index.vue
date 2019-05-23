@@ -152,6 +152,8 @@ export default {
 .xingzuo-detail {
   height: 100vh;
   font-size: 28rpx;
+  background-color: #edddf1;
+  color: #22182c;
 
   .xingzuo-detail-wrap {
     padding: 60rpx 40rpx;
@@ -177,6 +179,7 @@ export default {
 
       > .xingzuo-detail-title {
         font-size: 36rpx;
+        color: #c294f0;
         padding-bottom: 10rpx;
         margin-bottom: 10rpx;
         border-bottom: 2rpx solid #dac2f1;
@@ -190,7 +193,7 @@ export default {
 
         > .xingzuo-field-title {
           padding-top: 10rpx;
-          color: #dac2f1;
+          color: #4a4dfc;
         }
 
         > .xingzuo-field-value {

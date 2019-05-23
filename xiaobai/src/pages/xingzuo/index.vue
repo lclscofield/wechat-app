@@ -53,8 +53,8 @@ export default {
 .xingzuo {
   height: 100vh;
   overflow: auto;
-  font-size: 28rpx;
-  background-image: linear-gradient(135deg, #43cbff 10%, #9708cc 100%);
+  font-size: 32rpx;
+  background-image: linear-gradient(135deg, #ce9ffc 10%, #7367f0 100%);
   color: #ffffff;
 
   > .xingzuo-list {
@@ -64,10 +64,10 @@ export default {
 
     > .xingzuo-item {
       width: 30%;
-      height: 80rpx;
-      line-height: 80rpx;
-      border: 2rpx solid #2e5bbd;
-      border-radius: 8rpx;
+      height: 100rpx;
+      line-height: 100rpx;
+      border: 4rpx solid #ffffff;
+      border-radius: 16rpx;
       padding: 0 20rpx;
       margin-top: 80rpx;
       display: flex;
