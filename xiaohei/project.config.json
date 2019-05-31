@@ -1,0 +1,13 @@
+{
+  "description": "A WePY project",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram",
+  "appid": "wx9c9762468e34cce0",
+  "projectname": "xiaohei",
+  "miniprogramRoot": "./dist"
+}
