@@ -9,7 +9,7 @@
 		"newFeature": true,
 		"coverView": true,
 		"nodeModules": false,
-		"autoAudits": false,
+		"autoAudits": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -22,7 +22,7 @@
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wx9c9762468e34cce0",
-	"projectname": "xiaohei",
+	"projectname": "steam",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
