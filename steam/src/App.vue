@@ -1,6 +1,8 @@
 <script>
 export default {
   created () {
+    // 云函数初始化
+    wx.cloud.init()
     /*
      * 平台 api 差异的处理方式:  api 方法统一挂载到 mpvue 名称空间, 平台判断通过 mpvuePlatform 特征字符串
      * 微信：mpvue === wx, mpvuePlatform === 'wx'

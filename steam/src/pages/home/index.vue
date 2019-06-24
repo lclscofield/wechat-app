@@ -1,10 +1,11 @@
 <template>
   <div id="home">
     <van-search :value="searchVal" placeholder="请输入搜索关键词" />
+
     <van-tabs animated swipeable color="#1b3b51" :active="tabActive" @change="onTabChange">
       <van-tab :title="item.title" v-for="(item, idx) in tabs" :key="idx + item.title">
         <div class="list-wrap">
-          <list></list>
+          <contnet-list :tabActive="tabActive" :tabCurrent="idx" :tabCb="item.cb"></contnet-list>
         </div>
       </van-tab>
     </van-tabs>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import List from '../../components/List.vue'
+import ContnetList from '../../components/List.vue'
 
 export default {
   data () {
@@ -20,26 +21,34 @@ export default {
       searchVal: '', // 搜索值
       tabActive: 0, // 当前标签页
       tabs: [{
-        title: '实时优惠'
+        title: '实时优惠',
+        cb: 'specials'
       }, {
-        title: '热门游戏'
+        title: '热门游戏',
+        cb: 'specials'
       }, {
-        title: '最新游戏'
+        title: '最新游戏',
+        cb: 'specials'
       }, {
-        title: '热门即将推出'
+        title: '热门即将推出',
+        cb: 'specials'
       }]
     }
   },
 
   components: {
-    List
+    ContnetList
+  },
+
+  mounted () {
   },
 
   methods: {
     // 切换 tab
     onTabChange (event) {
       let { index, title } = event.mp.detail
-      console.log(index, title)
+      this.tabActive = index
+      console.log(index, title, this.tabActive)
     }
   }
 }
