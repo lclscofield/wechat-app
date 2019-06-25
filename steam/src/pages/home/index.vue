@@ -2,13 +2,14 @@
   <div id="home">
     <van-search :value="searchVal" placeholder="请输入搜索关键词" />
 
-    <van-tabs animated swipeable color="#1b3b51" :active="tabActive" @change="onTabChange">
+    <van-tabs animated color="#1b3b51" :active="tabActive" @change="onTabChange">
       <van-tab :title="item.title" v-for="(item, idx) in tabs" :key="idx + item.title">
-        <div class="list-wrap">
-          <contnet-list :tabActive="tabActive" :tabCurrent="idx" :tabCb="item.cb"></contnet-list>
-        </div>
       </van-tab>
     </van-tabs>
+
+    <div class="list-wrap">
+      <contnet-list :tabActive="tabActive" :tabCb="tabs[tabActive].cb"></contnet-list>
+    </div>
   </div>
 </template>
 
@@ -24,11 +25,11 @@ export default {
         title: '实时优惠',
         cb: 'specials'
       }, {
-        title: '热门游戏',
-        cb: 'specials'
+        title: '最热游戏',
+        cb: 'topsellers'
       }, {
-        title: '最新游戏',
-        cb: 'specials'
+        title: '热门新品',
+        cb: 'popularnew'
       }, {
         title: '热门即将推出',
         cb: 'specials'
@@ -40,7 +41,11 @@ export default {
     ContnetList
   },
 
-  mounted () {
+  // 监听下拉事件, 暂时没有逻辑
+  onPullDownRefresh () {
+    setTimeout(() => {
+      wx.stopPullDownRefresh()
+    }, 100)
   },
 
   methods: {

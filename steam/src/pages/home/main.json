@@ -1,4 +1,5 @@
 {
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "van-search": "../../../static/vant/search/index",
     "van-tab": "../../../static/vant/tab/index",

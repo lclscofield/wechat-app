@@ -7,7 +7,6 @@
     "backgroundColor": "#1b3b51",
     "navigationBarBackgroundColor": "#1b3b51",
     "navigationBarTitleText": "Steam 折扣小助手",
-    "navigationBarTextStyle": "white",
-    "enablePullDownRefresh": true
+    "navigationBarTextStyle": "white"
   }
 }

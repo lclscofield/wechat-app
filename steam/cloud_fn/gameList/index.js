@@ -15,8 +15,14 @@ exports.main = async (event, context) => {
   //   appid: wxContext.APPID,
   //   unionid: wxContext.UNIONID
   // }
-
-  const url = `https://store.steampowered.com/search/results?specials=1&page=${event.page}`
+  let url = ''
+  if (event.cb === 'specials') {
+    url = `https://store.steampowered.com/search/results?specials=1&page=${event.page}`
+  } else if (event.cb === 'topsellers') {
+    url = `https://store.steampowered.com/search/results?filter=topsellers&page=${event.page}`
+  } else if (event.cb === 'popularnew') {
+    url = `https://store.steampowered.com/search/results?filter=popularnew&page=${event.page}`
+  }
 
   const res = await getHtml({ url })
   const $ = cheerio.load(res, { decodeEntities: false })
