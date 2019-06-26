@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <van-search :value="searchVal" placeholder="请输入搜索关键词" />
+    <van-search :value="searchVal" placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" show-action="true" />
 
     <van-tabs animated color="#1b3b51" :active="tabActive" @change="onTabChange">
       <van-tab :title="item.title" v-for="(item, idx) in tabs" :key="idx + item.title">
@@ -8,12 +8,13 @@
     </van-tabs>
 
     <div class="list-wrap">
-      <contnet-list :tabActive="tabActive" :tabCb="tabs[tabActive].cb"></contnet-list>
+      <contnet-list :tabActive="tabActive" :tabCb="tabs[tabActive].cb" :searchVal="searchVal"></contnet-list>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ContnetList from '../../components/List.vue'
 
 export default {
@@ -31,14 +32,20 @@ export default {
         title: '热门新品',
         cb: 'popularnew'
       }, {
-        title: '热门即将推出',
-        cb: 'specials'
+        title: '即将推出',
+        cb: 'comingsoon'
       }]
     }
   },
 
   components: {
     ContnetList
+  },
+
+  computed: {
+    ...mapState([
+      'search'
+    ])
   },
 
   // 监听下拉事件, 暂时没有逻辑
@@ -54,6 +61,17 @@ export default {
       let { index, title } = event.mp.detail
       this.tabActive = index
       console.log(index, title, this.tabActive)
+    },
+    // 搜索
+    onSearch () {
+      this.tabActive = -1
+    },
+    // 取消搜索
+    onCancel () {
+      this.tabActive = 0
+      this.search.page = 1
+      this.search.scrollTop = 0
+      this.search.list = []
     }
   }
 }

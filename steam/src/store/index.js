@@ -19,6 +19,16 @@ const state = {
     page: 1,
     scrollTop: 0,
     list: []
+  },
+  comingsoon: { // 即将推出
+    page: 1,
+    scrollTop: 0,
+    list: []
+  },
+  search: { // 搜索数据
+    page: 1,
+    scrollTop: 0,
+    list: []
   }
 }
 

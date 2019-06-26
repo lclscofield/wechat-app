@@ -17,11 +17,15 @@ exports.main = async (event, context) => {
   // }
   let url = ''
   if (event.cb === 'specials') {
-    url = `https://store.steampowered.com/search/results?specials=1&page=${event.page}`
+    url = `https://store.steampowered.com/search/results?l=schinese&specials=1&page=${event.page}`
   } else if (event.cb === 'topsellers') {
-    url = `https://store.steampowered.com/search/results?filter=topsellers&page=${event.page}`
+    url = `https://store.steampowered.com/search/results?l=schinese&filter=topsellers&page=${event.page}`
   } else if (event.cb === 'popularnew') {
-    url = `https://store.steampowered.com/search/results?filter=popularnew&page=${event.page}`
+    url = `https://store.steampowered.com/search/results?l=schinese&filter=popularnew&page=${event.page}`
+  } else if (event.cb === 'comingsoon') {
+    url = `https://store.steampowered.com/search/results?l=schinese&filter=comingsoon&page=${event.page}`
+  } else if (event.cb === 'search') {
+    url = `https://store.steampowered.com/search/results?l=schinese&term=${event.search}&page=${event.page}`
   }
 
   const res = await getHtml({ url })

@@ -1,34 +1,45 @@
 <template>
-  <scroll-view class="list" scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="200">
+  <div class="list-wrap">
     <!-- loading -->
-    <van-loading class="list-loading" type="spinner" color="#1989fa" size="24px" v-if="!currentData.list.length" />
+    <van-loading class="tab-loading" type="spinner" color="#1989fa" size="24px" v-if="tabLoading" />
 
-    <!-- game list -->
-    <div class="game" v-for="(item, idx) in currentData.list" :key="idx + item.title">
-      <!-- left -->
-      <div class="game-left">
-        <img class="game-img-min" :src="item.imgMin">
-        <!-- left-bottom -->
-        <div class="game-left-btm">
-          <div class="game-released">{{ item.released || '暂未发布' }}</div>
-          <img class="game-review" :src="item.reviewImg">
+    <scroll-view class="list" v-else scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="200">
+      <!-- game list -->
+      <div class="game" v-for="(item, idx) in currentData.list" :key="idx + item.title">
+        <!-- left -->
+        <div class="game-left">
+          <image class="game-img-min" lazy-load="true" :src="item.imgMin"></image>
+          <!-- left-bottom -->
+          <div class="game-left-btm">
+            <div class="game-released">{{ item.released }}</div>
+            <img class="game-review" :src="item.reviewImg">
+          </div>
+        </div>
+        <!-- right -->
+        <div class="game-right">
+          <div class="game-title">{{ item.title }}</div>
+          <div class="game-right-btm">
+            <div class="game-discount" v-if="item.discount">{{ item.discount }}</div>
+
+            <div class="game-price-wrap">
+              <div class="game-price">{{ item.price }}</div>
+              <div class="game-strike">{{ item.strike }}</div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- right -->
-      <div class="game-right">
-        <div class="game-title">{{ item.title }}</div>
-        <div class="game-price-wrap">
-          <div class="game-price">{{ item.price }}</div>
-          <div class="game-strike">{{ item.strike }}</div>
-        </div>
+
+      <!-- moreLoading -->
+      <div class="more-loading-wrap">
+        <van-loading class="more-loading" type="spinner" color="#1989fa" size="24px" v-if="moreLoading" />
       </div>
-    </div>
-  </scroll-view>
+    </scroll-view>
+  </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { formatTime } from '../utils/index'
+// import { formatTime } from '../utils/index'
 
 export default {
   name: 'List',
@@ -41,12 +52,18 @@ export default {
     tabCb: {
       default: '',
       type: String
+    },
+    searchVal: {
+      default: '',
+      type: String
     }
   },
 
   data () {
     return {
-      scrollTop: 0,
+      scrollTop: 0, // 滚动条高度
+      tabLoading: false, // 切换 tab 后是否渲染完成
+      moreLoading: false, // 是否在加载更多
       currentData: {
         page: 1,
         list: []
@@ -58,24 +75,44 @@ export default {
     ...mapState([
       'specials',
       'topsellers',
-      'popularnew'
+      'popularnew',
+      'comingsoon',
+      'search'
     ])
   },
 
   watch: {
     // 监听 tabActive 获取当前 tab 数据
-    tabActive () {
-      console.log(this.tabActive, this.tabCb)
+    async tabActive () {
+      // 防止获取其他页的数据
+      if (this.tabLoading === true && !this[[this.tabCb]].list.length) return
+      this.tabLoading = true
+      // search
+      if (this.tabActive === -1) {
+        this.tabCb = 'search'
+      }
+      console.log(this.tabActive, this.tabCb, this.tabLoading)
       this.currentData = this[[this.tabCb]]
       // 设置滚动条距离
       this.scrollTop = this.currentData.scrollTop
+      // 获取数据
+      if (!this.currentData.list.length) {
+        await this.cloudFn()
+      }
+      this.$nextTick(() => {
+        this.tabLoading = false
+      })
     }
   },
 
-  mounted () {
+  async mounted () {
+    this.tabLoading = true
     console.log(this.tabActive, this.tabCb)
     this.currentData = this[[this.tabCb]]
-    this.cloudFn()
+    await this.cloudFn()
+    this.$nextTick(() => {
+      this.tabLoading = false
+    })
   },
 
   methods: {
@@ -87,10 +124,16 @@ export default {
       this.currentData.scrollTop = e.mp.detail.scrollTop
     },
     // 加载更多数据
-    loadMore () {
+    async loadMore () {
+      // 判断是否在加载中
+      if (this.moreLoading) return
+      this.moreLoading = true
       // 每次都是获取下一页
       this.currentData.page++
-      this.cloudFn()
+      await this.cloudFn()
+      this.$nextTick(() => {
+        this.moreLoading = false
+      })
     },
     // 调用云函数获取数据列表
     async cloudFn () {
@@ -98,16 +141,17 @@ export default {
         name: 'gameList',
         data: {
           page: this.currentData.page,
-          cb: this.tabCb
+          cb: this.tabCb,
+          search: this.searchVal
         }
       })
       // 转换时间格式
-      res.result.forEach(item => {
-        // 存在发布时间时才转换格式
-        if (item.released) {
-          item.released = formatTime(new Date(item.released), false, '-')
-        }
-      })
+      // res.result.forEach(item => {
+      //   // 存在发布时间时才转换格式
+      //   if (item.released) {
+      //     item.released = formatTime(new Date(item.released), false, '-')
+      //   }
+      // })
       // 数据添加到当前数据列表尾部
       this.currentData.list = this.currentData.list.concat(res.result)
       console.log(this.currentData)
@@ -117,53 +161,118 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.list {
+.list-wrap {
   height: 100%;
   position: relative;
 
-  .list-loading {
+  .tab-loading {
     position: absolute;
     top: 30%;
     left: 50%;
     transform: translateX(-50%);
   }
 
-  .game {
-    padding: 20rpx;
-    margin: 10rpx;
-    margin-bottom: 20rpx;
-    display: flex;
-    align-items: center;
-    color: #1b3b51;
-    border-radius: 4rpx;
-    box-shadow: 0 0 6rpx 2rpx #b4c7d3;
+  .list {
+    height: 100%;
 
-    > .game-left {
-      padding-right: 20rpx;
+    .game {
+      padding: 10rpx 20rpx;
+      margin: 10rpx 20rpx 20rpx;
+      display: flex;
+      color: #1b3b51;
+      border-radius: 4rpx;
+      box-shadow: 0 0 6rpx 2rpx #b4c7d3;
 
-      > .game-img-min {
-        width: 240rpx;
-        height: 90rpx;
-        border-radius: 4rpx;
+      > .game-left {
+        padding-right: 20rpx;
+
+        > .game-img-min {
+          width: 300rpx;
+          height: 120rpx;
+          border-radius: 4rpx;
+        }
+
+        > .game-left-btm {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          > .game-released {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          > .game-review {
+            width: 32rpx;
+            height: 32rpx;
+          }
+        }
       }
 
-      > .game-left-btm {
+      > .game-right {
+        flex: 1;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
 
-        > .game-released {
-          flex: 1;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+        > .game-title {
+          line-height: 34rpx;
         }
-        > .game-review {
-          width: 32rpx;
-          height: 32rpx;
+
+        > .game-right-btm {
+          display: flex;
+          justify-content: space-between;
+
+          > .game-discount {
+            display: inline-block;
+            color: #8bc53f;
+            background: #4c6b22;
+            padding: 0 10rpx;
+          }
+
+          > .game-price-wrap {
+            flex: 1;
+            text-align: right;
+
+            > .game-price {
+              display: inline-block;
+              color: #888888;
+              text-decoration: line-through;
+            }
+
+            > .game-strike {
+              display: inline-block;
+              margin-left: 20rpx;
+            }
+          }
         }
       }
     }
+
+    .more-loading-wrap {
+      width: 100%;
+      padding: 30rpx 0;
+      text-align: center;
+    }
+  }
+
+  /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+  ::-webkit-scrollbar {
+    width: 12rpx;
+    height: 12rpx;
+    background-color: #ffffff;
+  }
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #1b3b51;
   }
 }
 </style>

@@ -20,6 +20,7 @@ async function getData ($) {
       let game = {}
       // 小图
       game.imgMin = getAttr($(e), '.search_capsule img', 'src')
+      game.imgMin = game.imgMin ? game.imgMin.replace(/sm_120/, '231x87') : ''
       // 游戏名
       game.title = getText($(e), '.title')
       // 发布时间
