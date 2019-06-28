@@ -56,6 +56,12 @@ export default {
     }, 100)
   },
 
+  // 监听转发事件
+  onShareAppMessage (res) {
+    return {
+    }
+  },
+
   methods: {
     // 切换 tab
     onTabChange (event) {
