@@ -30,8 +30,13 @@
       </div>
 
       <!-- moreLoading -->
-      <div class="more-loading-wrap">
-        <van-loading class="more-loading" type="spinner" color="#1989fa" size="24px" v-if="moreLoading" />
+      <div class="more-loading-wrap" v-if="moreLoading">
+        <van-loading class="more-loading" type="spinner" color="#1989fa" size="24px" />
+      </div>
+
+      <!-- empty -->
+      <div class="empty" v-if="showEmpty">
+        =_= 没有更多啦~
       </div>
     </scroll-view>
   </div>
@@ -70,7 +75,8 @@ export default {
         loading: false,
         list: []
       }, // 当前数据
-      prevCb: '' // search 之前的 cb
+      prevCb: '', // search 之前的 cb
+      showEmpty: false // 显示没有更多了
     }
   },
 
@@ -103,6 +109,8 @@ export default {
       this.currentData = this[[newCb]]
       // 设置滚动条距离
       this.scrollTop = this.currentData.scrollTop
+      // 重置 empty
+      this.showEmpty = false
       // 获取数据
       if (!this.currentData.list.length && newCb !== 'search') {
         await this.cloudFn()
@@ -150,6 +158,8 @@ export default {
     },
     // 取消搜索
     onCancel () {
+      // 重置 empty
+      this.showEmpty = false
       // 重置 tabCb
       this.$emit('changeCb', this.prevCb)
       this.prevCb = ''
@@ -164,7 +174,7 @@ export default {
     // 加载更多数据
     async loadMore () {
       // 判断是否在加载中
-      if (this.moreLoading) return
+      if (this.showEmpty || this.moreLoading) return
       this.moreLoading = true
       // 每次都是获取下一页
       this.currentData.page++
@@ -196,7 +206,12 @@ export default {
       //   }
       // })
       // 数据添加到当前数据列表尾部
-      typeData.list = typeData.list.concat(res.result)
+      if (res.result && res.result.length) {
+        this.showEmpty = false
+        typeData.list = typeData.list.concat(res.result)
+      } else {
+        this.showEmpty = true
+      }
       typeData.loading = false
       console.log(typeData)
     }
@@ -232,7 +247,7 @@ export default {
       opacity: 0;
     }
     to {
-      opacity: 1;      
+      opacity: 1;
     }
   }
 
@@ -320,6 +335,12 @@ export default {
       width: 100%;
       padding: 30rpx 0;
       text-align: center;
+    }
+
+    .empty {
+      line-height: 80rpx;
+      text-align: center;
+      color: #1b3b51;
     }
   }
 
