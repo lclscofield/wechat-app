@@ -216,8 +216,29 @@ export default {
     transform: translateX(-50%);
   }
 
+  // 动画
+  // list 高度过渡
+  @keyframes list {
+    from {
+      height: 0;
+    }
+    to {
+      height: 100%;
+    }
+  }
+  // game 透明显示
+  @keyframes game {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;      
+    }
+  }
+
   .list {
     height: 100%;
+    animation: list 0.5s linear;
 
     .game {
       padding: 10rpx 20rpx;
@@ -226,6 +247,7 @@ export default {
       color: #1b3b51;
       border-radius: 4rpx;
       box-shadow: 0 0 6rpx 2rpx #b4c7d3;
+      animation: game 0.3s linear;
 
       > .game-left {
         padding-right: 20rpx;
