@@ -3,7 +3,7 @@
     <!-- loading -->
     <van-loading class="tab-loading" type="spinner" color="#1989fa" size="24px" v-if="tabLoading" />
 
-    <scroll-view class="list" v-else scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="200">
+    <scroll-view class="list" v-else scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="300">
       <!-- game list -->
       <div class="game" v-for="(item, idx) in currentData.list" :key="idx + item.title">
         <!-- left -->
@@ -66,8 +66,11 @@ export default {
       moreLoading: false, // 是否在加载更多
       currentData: {
         page: 1,
+        scrollTop: 0,
+        loading: false,
         list: []
-      } // 当前数据
+      }, // 当前数据
+      prevCb: '' // search 之前的 cb
     }
   },
 
@@ -82,23 +85,29 @@ export default {
   },
 
   watch: {
-    // 监听 tabActive 获取当前 tab 数据
-    async tabActive () {
-      // 防止获取其他页的数据
-      if (this.tabLoading === true && !this[[this.tabCb]].list.length) return
+    // 监听 tabActive 切换 search tabCb
+    // tabActive () {
+    //   // search
+    //   if (this.tabActive === -1) {
+    //     this.tabCb = 'search'
+    //   }
+    // },
+    // 监听 tabCb 获取当前 tab 数据
+    async tabCb (newCb, oldCb) {
+      // search 不走这个逻辑
+      if (newCb === 'search') return
       this.tabLoading = true
-      // search
-      if (this.tabActive === -1) {
-        this.tabCb = 'search'
-      }
-      console.log(this.tabActive, this.tabCb, this.tabLoading)
-      this.currentData = this[[this.tabCb]]
+      // 防止获取其他页的数据
+      // if (this[[this.tabCb]].list.length) return
+
+      this.currentData = this[[newCb]]
       // 设置滚动条距离
       this.scrollTop = this.currentData.scrollTop
       // 获取数据
-      if (!this.currentData.list.length) {
+      if (!this.currentData.list.length && newCb !== 'search') {
         await this.cloudFn()
       }
+
       this.$nextTick(() => {
         this.tabLoading = false
       })
@@ -119,6 +128,35 @@ export default {
     ...mapMutations({
       // setPage: 'SET_PAGE'
     }),
+    // search
+    async onSearch (searchVal) {
+      // 保存上一个 tabCb
+      if (this.prevCb === '') {
+        this.prevCb = this.tabCb
+      }
+      // 传递 searchVal
+      this.searchVal = searchVal
+      // 改变 cb 调整请求变量
+      await this.$emit('changeCb', 'search')
+      this.tabLoading = true
+      this.search.page = 1
+      this.search.scrollTop = 0
+      this.search.list = []
+      this.currentData = this.search
+      // 设置滚动条距离
+      this.scrollTop = this.currentData.scrollTop
+      await this.cloudFn()
+      this.tabLoading = false
+    },
+    // 取消搜索
+    onCancel () {
+      // 重置 tabCb
+      this.$emit('changeCb', this.prevCb)
+      this.prevCb = ''
+      this.search.page = 1
+      this.search.scrollTop = 0
+      this.search.list = []
+    },
     // 监听滚动事件
     onScroll (e) {
       this.currentData.scrollTop = e.mp.detail.scrollTop
@@ -137,10 +175,15 @@ export default {
     },
     // 调用云函数获取数据列表
     async cloudFn () {
+      // 数据注入
+      let typeData = this.currentData
+      // 防止多次获取数据
+      if (typeData.loading) return
+      typeData.loading = true
       const res = await wx.cloud.callFunction({
         name: 'gameList',
         data: {
-          page: this.currentData.page,
+          page: typeData.page,
           cb: this.tabCb,
           search: this.searchVal
         }
@@ -153,8 +196,9 @@ export default {
       //   }
       // })
       // 数据添加到当前数据列表尾部
-      this.currentData.list = this.currentData.list.concat(res.result)
-      console.log(this.currentData)
+      typeData.list = typeData.list.concat(res.result)
+      typeData.loading = false
+      console.log(typeData)
     }
   }
 }

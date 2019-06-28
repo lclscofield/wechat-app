@@ -1,14 +1,14 @@
 <template>
   <div id="home">
-    <van-search :value="searchVal" placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" show-action="true" />
+    <van-search :value="searchVal" placeholder="请输入搜索关键词" @search="onSearch" @cancel="onCancel" :show-action="isSearch" />
 
-    <van-tabs animated color="#1b3b51" :active="tabActive" @change="onTabChange">
+    <van-tabs v-if="!isSearch" animated color="#1b3b51" :active="tabActive" @change="onTabChange">
       <van-tab :title="item.title" v-for="(item, idx) in tabs" :key="idx + item.title">
       </van-tab>
     </van-tabs>
 
-    <div class="list-wrap">
-      <contnet-list :tabActive="tabActive" :tabCb="tabs[tabActive].cb" :searchVal="searchVal"></contnet-list>
+    <div class="list-wrap" :class="{ 'search-list': isSearch }">
+      <contnet-list ref="list" :tabActive="tabActive" :tabCb="tabs[tabActive].cb" :searchVal="searchVal" @changeCb="changeCb"></contnet-list>
     </div>
   </div>
 </template>
@@ -34,7 +34,8 @@ export default {
       }, {
         title: '即将推出',
         cb: 'comingsoon'
-      }]
+      }],
+      isSearch: false // 是否是搜索中
     }
   },
 
@@ -63,15 +64,21 @@ export default {
       console.log(index, title, this.tabActive)
     },
     // 搜索
-    onSearch () {
-      this.tabActive = -1
+    async onSearch (e) {
+      this.searchVal = e.mp.detail
+      this.isSearch = true
+      await this.$refs.list.onSearch(this.searchVal)
     },
     // 取消搜索
     onCancel () {
-      this.tabActive = 0
-      this.search.page = 1
-      this.search.scrollTop = 0
-      this.search.list = []
+      this.searchVal = ''
+      this.isSearch = false
+      this.$refs.list.onCancel()
+    },
+    // 改变 cb
+    changeCb (val) {
+      console.log(22222, val)
+      this.tabs[this.tabActive].cb = val
     }
   }
 }
@@ -84,6 +91,9 @@ export default {
 
   .list-wrap {
     height: calc(100vh - 98px);
+    &.search-list {
+      height: calc(100vh - 54px);
+    }
   }
 }
 </style>

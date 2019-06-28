@@ -27,6 +27,7 @@ exports.main = async (event, context) => {
   } else if (event.cb === 'search') {
     url = `https://store.steampowered.com/search/results?l=schinese&term=${event.search}&page=${event.page}`
   }
+  console.log(url)
 
   const res = await getHtml({ url })
   const $ = cheerio.load(res, { decodeEntities: false })

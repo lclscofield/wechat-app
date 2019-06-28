@@ -42,9 +42,14 @@ async function getData ($) {
       // 折扣信息
       game.discount = getText($(e), '.search_discount')
       // 价格
-      let price = getText($(e), '.search_price')
-      game.price = price.slice(0, price.lastIndexOf('¥')) // 原价
-      game.strike = price.slice(price.lastIndexOf('¥')) // 折后价
+      let price = getText($(e), '.search_price.discounted')
+      if (price) { // 有折扣
+        game.price = getText($(e), 'strike') // 原价
+        game.strike = price.slice(price.lastIndexOf('¥')) // 折后价
+      } else { // 无折扣
+        game.price = ''
+        game.strike = getText($(e), '.search_price') // 原价
+      }
 
       listData.push(game)
     })
