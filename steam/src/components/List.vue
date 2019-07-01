@@ -5,7 +5,7 @@
 
     <scroll-view class="list" v-else scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="300">
       <!-- game list -->
-      <div class="game" v-for="(item, idx) in currentData.list" :key="idx + item.title">
+      <view class="game" hover-class="hover-class" v-for="(item, idx) in currentData.list" :key="idx + item.title" @click="toGameDetail(item.url, item.title)">
         <!-- left -->
         <div class="game-left">
           <image class="game-img-min" lazy-load="true" :src="item.imgMin"></image>
@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </view>
 
       <!-- moreLoading -->
       <div class="more-loading-wrap" v-if="moreLoading">
@@ -214,6 +214,13 @@ export default {
       }
       typeData.loading = false
       console.log(typeData)
+    },
+    // 前往详情
+    toGameDetail (url, title) {
+      console.log(url, title)
+      wx.navigateTo({
+        url: '../detail/main?url=' + encodeURIComponent(url) + '&title=' + title
+      })
     }
   }
 }
@@ -263,6 +270,11 @@ export default {
       border-radius: 4rpx;
       box-shadow: 0 0 6rpx 2rpx #b4c7d3;
       animation: game 0.3s linear;
+
+      // 点击态
+      &.hover-class {
+        background: #d3d5d7;
+      }
 
       > .game-left {
         padding-right: 20rpx;

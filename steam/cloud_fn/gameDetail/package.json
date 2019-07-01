@@ -1,5 +1,5 @@
 {
-  "name": "game-list",
+  "name": "game-detail",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "wx-server-sdk": "latest",
-    "request":"^2.88.0",
     "cheerio":"^1.0.0-rc.3"
   }
 }

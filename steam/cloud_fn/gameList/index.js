@@ -27,9 +27,13 @@ exports.main = async (event, context) => {
   } else if (event.cb === 'search') {
     url = `https://store.steampowered.com/search/results?l=schinese&term=${event.search}&page=${event.page}`
   }
-  console.log(url)
+  console.log('url: ', url)
 
+  const st = new Date()
   const res = await getHtml({ url })
+  // 打印爬取页面时间
+  console.log('crawl: ', new Date() - st + 'ms')
+
   const $ = cheerio.load(res, { decodeEntities: false })
   const data = await getData($)
 
