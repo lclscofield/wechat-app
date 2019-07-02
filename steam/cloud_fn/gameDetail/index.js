@@ -15,7 +15,7 @@ exports.main = async (event, context) => {
   //   appid: wxContext.APPID,
   //   unionid: wxContext.UNIONID,
   // }
-  let url = event.url
+  let url = event.url + '&l=schinese'
   console.log('url: ', url)
 
   const st = new Date()

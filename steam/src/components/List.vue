@@ -122,6 +122,11 @@ export default {
     }
   },
 
+  onShow () {
+    // 设置滚动条距离
+    this.scrollTop = this.currentData.scrollTop
+  },
+
   async mounted () {
     this.tabLoading = true
     console.log(this.tabActive, this.tabCb)
@@ -264,7 +269,7 @@ export default {
 
     .game {
       padding: 10rpx 20rpx;
-      margin: 10rpx 20rpx 20rpx;
+      margin: 0rpx 20rpx 20rpx;
       display: flex;
       color: #1b3b51;
       border-radius: 4rpx;
@@ -359,7 +364,7 @@ export default {
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
   ::-webkit-scrollbar {
     width: 12rpx;
-    height: 12rpx;
+    // height: 12rpx;
     background-color: #ffffff;
   }
   /*定义滚动条轨道 内阴影+圆角*/

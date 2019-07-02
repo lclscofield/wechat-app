@@ -4,8 +4,8 @@ export default {
     // 云函数初始化
     wx.cloud.init({
       // 切换环境
-      // env: 'steam-ze69m'
-      env: 'steam-dev-k3q3r',
+      env: 'steam-ze69m',
+      // env: 'steam-dev-k3q3r',
       traceUser: true
     })
     /*

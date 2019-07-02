@@ -18,7 +18,7 @@ function getAttr ($, rule, attr) {
 async function getData ($) {
   const st = new Date()
   let listData = []
-  $('search_result_row').each((idx, e) => {
+  $('.search_result_row').each((idx, e) => {
     let game = {}
     // 小图
     game.imgMin = getAttr($(e), '.search_capsule img', 'src')

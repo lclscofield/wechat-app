@@ -96,9 +96,9 @@ export default {
   font-size: 28rpx;
 
   .list-wrap {
-    height: calc(100vh - 98px);
+    height: calc(100vh - 196rpx);
     &.search-list {
-      height: calc(100vh - 54px);
+      height: calc(100vh - 108rpx);
     }
   }
 }

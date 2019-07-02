@@ -24,9 +24,9 @@ async function getData ($) {
   // appName
   gameData.appName = getText($('.apphub_HeaderStandardTop .apphub_AppName'))
   // appIcon
-  gameData.appIcon = getAttr($('.apphub_HeaderStandardTop .apphub_AppIcon img', '', 'src'))
+  gameData.appIcon = getAttr($('.apphub_HeaderStandardTop .apphub_AppIcon img'), '', 'src')
   // 大图
-  gameData.imgMax = getAttr($('.game_background_glow .game_header_image_full', '', 'src'))
+  gameData.imgMax = getAttr($('.game_background_glow .game_header_image_full'), '', 'src')
   // 描述
   gameData.desc = getText($('.game_background_glow .game_description_snippet'))
   // 简易评测
@@ -61,23 +61,29 @@ async function getData ($) {
   })
   // 热门标签
   gameData.tags = []
-  $('.popular_tags .app_tag').each((idx, e) => {
+  $('.popular_tags a.app_tag').each((idx, e) => {
     gameData.tags.push(getText($(e)))
   })
   // 视频列表
   gameData.videos = []
-  $('video.highlight_movie').each((idx, e) => {
-    let video = getAttr($(e), '', 'src')
+  $('div.highlight_movie').each((idx, e) => {
+    let video = {}
+    video.src = getAttr($(e), '', 'data-mp4-source')
+    video.poster = getAttr($(e), '', 'data-poster')
     if (video) {
       // 视频格式后缀转换
-      video = video.replace(/webm/, 'mp4')
+      // video = video.replace(/webm/, 'mp4')
       gameData.videos.push(video)
     }
   })
   // 图片列表
   gameData.imgs = []
-  $('.highlight_screenshot_link img').each((idx, e) => {
-    gameData.videos.push(getAttr($(e), '', 'src'))
+  $('a.highlight_screenshot_link').each((idx, e) => {
+    let img = getAttr($(e), '', 'href')
+    if (img) {
+      img = img.split('url=')[1] || ''
+    }
+    img && gameData.imgs.push(img.replace(/1920x1080/, '600x338'))
   })
 
   // 打印解析数据时间
