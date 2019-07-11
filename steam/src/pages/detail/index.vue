@@ -40,6 +40,8 @@
           <image :src="img" class="swiper-item" mode="widthFix"></image>
         </swiper-item>
       </swiper>
+      <!-- banner 广告 -->
+      <ad unit-id="adunit-92d7aa9b5209ad81"></ad>
     </scroll-view>
   </div>
 </template>

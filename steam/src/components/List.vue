@@ -4,6 +4,8 @@
     <van-loading class="tab-loading" type="spinner" color="#1989fa" size="24px" v-if="tabLoading" />
 
     <scroll-view class="list" v-else scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="300">
+      <!-- banner 广告 -->
+      <ad unit-id="adunit-a19f795a8a0b1a48"></ad>
       <!-- game list -->
       <view class="game" hover-class="hover-class" v-for="(item, idx) in currentData.list" :key="idx + item.title" @click="toGameDetail(item.url, item.title)">
         <!-- left -->
