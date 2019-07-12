@@ -6,6 +6,44 @@ const getData = require('./getData')
 
 cloud.init()
 
+// 获取数据库引用
+const db = cloud.database({
+  // 切换环境
+  env: 'steam-ze69m'
+  // env: 'steam-dev-k3q3r'
+})
+
+// 获取页面列表数据
+async function getList (url) {
+  const list = db.collection('list')
+  const getSt = new Date()
+
+  const doc = await list
+    .where({
+      url
+    })
+    .get()
+  // 打印读库时间
+  console.log('getList: ', new Date() - getSt + 'ms')
+  return doc
+}
+
+// 存入页面列表数据
+async function addList (url, res) {
+  const list = db.collection('list')
+  const getSt = new Date()
+
+  await list.add({
+    data: {
+      url,
+      date: new Date().toLocaleDateString(),
+      data: res
+    }
+  })
+  // 打印存库时间
+  console.log('addList: ', new Date() - getSt + 'ms')
+}
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   // const wxContext = cloud.getWXContext()
@@ -29,13 +67,26 @@ exports.main = async (event, context) => {
   }
   console.log('url: ', url)
 
-  const st = new Date()
-  const res = await getHtml({ url })
-  // 打印爬取页面时间
-  console.log('crawl: ', new Date() - st + 'ms')
+  let res = null
 
-  const $ = cheerio.load(res, { decodeEntities: false })
-  const data = await getData($)
+  // 先读库，库里有并且没过期则用库里的数据，反之爬取数据并存库
+  const doc = (await getList(url)).data[0]
+  if (doc && doc.date === new Date().toLocaleDateString() && doc.data) {
+    res = doc.data
+  } else {
+    const st = new Date()
+    // 爬取页面
+    const html = await getHtml({ url })
+    // 打印爬取页面时间
+    console.log('crawl: ', new Date() - st + 'ms')
 
-  return data
+    // 解析数据
+    const $ = cheerio.load(html, { decodeEntities: false })
+    res = await getData($)
+
+    // 数据存库
+    await addList(url, res)
+  }
+
+  return res
 }
