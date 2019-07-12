@@ -9,8 +9,8 @@ cloud.init()
 // 获取数据库引用
 const db = cloud.database({
   // 切换环境
-  env: 'steam-ze69m'
-  // env: 'steam-dev-k3q3r'
+  // env: 'steam-ze69m'
+  env: 'steam-dev-k3q3r'
 })
 
 // 获取页面列表数据
@@ -29,18 +29,30 @@ async function getDetail (url) {
 }
 
 // 存入页面列表数据
-async function addDetail (url, res) {
-  const list = db.collection('detail')
+async function addDetail (url, res, isSaved) {
+  const detail = db.collection('detail')
   const getSt = new Date()
 
-  await list.add({
-    data: {
-      url,
-      date: new Date().toLocaleDateString(),
-      data: res
-    }
-  })
-  // 打印存库时间
+  // 判断添加还是更新
+  if (isSaved) {
+    await detail.set({
+      data: {
+        url,
+        date: new Date().toLocaleDateString(),
+        data: res
+      }
+    })
+  } else {
+    await detail.add({
+      data: {
+        url,
+        date: new Date().toLocaleDateString(),
+        data: res
+      }
+    })
+  }
+
+  // 打印存库或更新时间
   console.log('addDetail: ', new Date() - getSt + 'ms')
 }
 
@@ -60,6 +72,7 @@ exports.main = async (event, context) => {
 
   // 先读库，库里有并且没过期则用库里的数据，反之爬取数据并存库
   const doc = (await getDetail(url)).data[0]
+  const isSaved = doc ? doc.hasOwnProperty('date') : false
   if (doc && doc.date === new Date().toLocaleDateString() && doc.data) {
     res = doc.data
   } else {
@@ -74,7 +87,7 @@ exports.main = async (event, context) => {
     res = await getData($)
 
     // 数据存库
-    await addDetail(url, res)
+    await addDetail(url, res, isSaved)
   }
 
   return res
