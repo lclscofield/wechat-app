@@ -41,7 +41,9 @@
         </swiper-item>
       </swiper>
       <!-- banner 广告 -->
-      <ad unit-id="adunit-92d7aa9b5209ad81"></ad>
+      <div class="adContainer">
+        <ad unit-id="adunit-92d7aa9b5209ad81"></ad>
+      </div>
     </scroll-view>
   </div>
 </template>
@@ -162,6 +164,12 @@ export default {
       margin-top: 10rpx;
       color: #aab0b8;
     }
+  }
+
+  .adContainer {
+    margin: 40rpx 10rpx 0;
+    border-radius: 4rpx;
+    box-shadow: 0 0 6rpx 2rpx #b4c7d3;
   }
 
   // 动画

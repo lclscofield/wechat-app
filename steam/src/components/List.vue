@@ -5,7 +5,9 @@
 
     <scroll-view class="list" v-else scroll-y="true" @scrolltolower="loadMore" @scroll="onScroll" :scroll-top="scrollTop" lower-threshold="300">
       <!-- banner 广告 -->
-      <ad unit-id="adunit-a19f795a8a0b1a48"></ad>
+      <div class="adContainer">
+        <ad unit-id="adunit-a19f795a8a0b1a48"></ad>
+      </div>
       <!-- game list -->
       <view class="game" hover-class="hover-class" v-for="(item, idx) in currentData.list" :key="idx + item.title" @click="toGameDetail(item.url, item.title)">
         <!-- left -->
@@ -268,6 +270,12 @@ export default {
   .list {
     height: 100%;
     animation: list 0.5s linear;
+
+    .adContainer {
+      margin: 0rpx 20rpx 20rpx;
+      border-radius: 4rpx;
+      box-shadow: 0 0 6rpx 2rpx #b4c7d3;
+    }
 
     .game {
       padding: 10rpx 20rpx;
