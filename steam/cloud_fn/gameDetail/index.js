@@ -32,16 +32,21 @@ async function getDetail (url) {
 async function addDetail (url, res, isSaved) {
   const detail = db.collection('detail')
   const getSt = new Date()
+  const _ = db.command
 
   // 判断添加还是更新
   if (isSaved) {
-    await detail.set({
-      data: {
-        url,
-        date: new Date().toLocaleDateString(),
-        data: res
-      }
-    })
+    await detail
+      .where({
+        url
+      })
+      .update({
+        data: {
+          url,
+          date: new Date().toLocaleDateString(),
+          data: _.set(res)
+        }
+      })
   } else {
     await detail.add({
       data: {

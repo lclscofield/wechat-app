@@ -32,16 +32,21 @@ async function getList (url) {
 async function addList (url, res, isSaved) {
   const list = db.collection('list')
   const getSt = new Date()
+  const _ = db.command
 
   // 判断添加还是更新
   if (isSaved) {
-    await list.set({
-      data: {
-        url,
-        date: new Date().toLocaleDateString(),
-        data: res
-      }
-    })
+    await list
+      .where({
+        url
+      })
+      .update({
+        data: {
+          url,
+          date: new Date().toLocaleDateString(),
+          data: _.set(res)
+        }
+      })
   } else {
     await list.add({
       data: {
