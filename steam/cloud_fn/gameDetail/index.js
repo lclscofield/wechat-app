@@ -9,8 +9,8 @@ cloud.init()
 // 获取数据库引用
 const db = cloud.database({
   // 切换环境
-  // env: 'steam-ze69m'
-  env: 'steam-dev-k3q3r'
+  env: 'steam-ze69m'
+  // env: 'steam-dev-k3q3r'
 })
 
 // 获取页面列表数据
@@ -78,7 +78,7 @@ exports.main = async (event, context) => {
   // 先读库，库里有并且没过期则用库里的数据，反之爬取数据并存库
   const doc = (await getDetail(url)).data[0]
   const isSaved = doc ? doc.hasOwnProperty('date') : false
-  if (doc && doc.date === new Date().toLocaleDateString() && doc.data) {
+  if (doc && doc.date === new Date().toLocaleDateString() && doc.data && Object.keys(doc.data).length) {
     res = doc.data
   } else {
     const st = new Date()
