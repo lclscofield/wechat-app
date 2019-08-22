@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/logs/main",
+    "pages/counter/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4badd8",
+    "navigationBarTitleText": "Switch 折扣游戏信息",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#483d3d",
+    "backgroundColor": "#fafafa",
+    "selectedColor": "#4badd8",
+    "borderStyle": "white",
+    "list": [
+      {
+        "text": "寻找游戏",
+        "pagePath": "pages/index/main",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "text": "个人中心",
+        "pagePath": "pages/logs/main",
+        "iconPath": "static/tabs/user.png",
+        "selectedIconPath": "static/tabs/user-active.png"
+      }
+    ],
+    "position": "bottom"
+  }
+}
