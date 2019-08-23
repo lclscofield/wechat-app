@@ -17,6 +17,7 @@
 			"outputPath": ""
 		}
 	},
+	"cloudfunctionRoot": "cloud_fn/",
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wx14a9b595e79c5b5b",
@@ -24,6 +25,7 @@
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"libVersion": "2.8.0",
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
 	"condition": {
 		"search": {
 			"current": -1,
